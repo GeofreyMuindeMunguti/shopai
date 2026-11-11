@@ -12,7 +12,7 @@ endif
 
 COMPOSE_CMD=docker compose $(foreach file,$(COMPOSE_FILES),-f $(file))
 
-.PHONY: up down reset logs logs-temporal logs-frontend supabase-status
+.PHONY: up down reset logs logs-temporal logs-frontend supabase-status db-reset db-test make-admin
 
 # `up` starts the full local Supabase stack (Postgres + API/Kong + Auth +
 # Storage + Studio) via the Supabase CLI, applying migrations and seed, THEN
@@ -46,3 +46,15 @@ logs-frontend:
 # Supabase is CLI-managed, not a compose service -- use this for its status/keys.
 supabase-status:
 	supabase status
+
+# Re-apply all migrations + seed to the local Supabase DB.
+db-reset:
+	supabase db reset --config supabase/config.toml
+
+# PostgREST contract test for schema, RLS and RPCs. Wipes the local DB first.
+db-test: db-reset
+	@eval "$$(supabase status -o env | sed -En 's/^(API_URL|ANON_KEY|SERVICE_ROLE_KEY)=/export \1=/p')"; python3 supabase/tests/contract_test.py
+
+# Promote a signed-in user to admin: make make-admin EMAIL=jane@example.com
+make-admin:
+	./scripts/make-admin.sh "$(EMAIL)"

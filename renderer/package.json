@@ -1,0 +1,13 @@
+{
+  "name": "scout-renderer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Playwright headless renderer sidecar for JavaScript-heavy retailers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "playwright": "1.48.2"
+  }
+}

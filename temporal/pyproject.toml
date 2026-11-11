@@ -1,21 +1,31 @@
 [project]
 name = "boilerplate-temporal"
-version = "0.0.1"
-description = "Temporal worker stub for boilerplate stack"
+version = "0.1.0"
+description = "Temporal worker for the AI Shopping Wishlist (Scout)"
 requires-python = ">=3.11"
 dependencies = [
-  "temporalio==1.5.0",
-  "pydantic==2.7.3",
-  "pydantic-settings==2.4.0",
-  "httpx==0.27.2"
+  "temporalio==1.36.0",
+  "pydantic==2.14.3",
+  "pydantic-settings==2.16.2",
+  "httpx==0.27.2",
+  "boto3==1.44.0"
 ]
 
 [project.optional-dependencies]
 dev = [
   "pytest",
+  "pytest-asyncio",
   "pytest-json-report"
 ]
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]

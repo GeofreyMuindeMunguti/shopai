@@ -172,6 +172,16 @@ def main():
     s, body = call("PATCH", f"/rest/v1/product_matches?id=eq.{match_id}", a, {"price": 1})
     check("clients can't edit match price", s in (401, 403) or body == [], body)
 
+    dup_url = "https://www.takealot.com/x/PLID3"
+    s, rec3 = rpc("record_candidate", SERVICE, p_candidate={**cand, "canonical_url": dup_url, "product_url": dup_url})
+    s, n = rpc("apply_scout_ranking", SERVICE, p_scout_run_id=run_id,
+               p_ranking=[{"match_id": match_id, "rank": 1, "best_for_retailer": True}],
+               p_duplicates=[{"match_id": rec3["match_id"], "duplicate_of": match_id}])
+    s, ranked = call("GET", f"/rest/v1/product_matches?wishlist_item_id=eq.{item_id}&select=id,rank,best_for_retailer,duplicate_of", a)
+    by_id = {m["id"]: m for m in ranked}
+    check("ranking persisted", n == 1 and by_id[match_id]["rank"] == 1 and by_id[match_id]["best_for_retailer"], ranked)
+    check("duplicate hidden", by_id[rec3["match_id"]]["duplicate_of"] == match_id, ranked)
+
     s, fin = rpc("finish_scout_run", SERVICE, p_scout_run_id=run_id, p_status="partial",
                  p_stats={"input_tokens": 1200, "output_tokens": 300, "tool_calls": 6, "pages_fetched": 4,
                           "task_models": {"scout_agent": {"input_tokens": 1200, "output_tokens": 300}},
@@ -288,7 +298,7 @@ def main():
     check("fx readable", {r["quote_currency"] for r in fx} >= {"KES", "ZAR"}, fx)
 
     s, data = rpc("export_my_data", a)
-    check("export", data["profile"]["user_id"] == a_id and len(data["product_matches"]) == 2, list(data))
+    check("export", data["profile"]["user_id"] == a_id and len(data["product_matches"]) == 3, list(data))
 
     # Scheduled re-scouts.
     call("PATCH", f"/rest/v1/wishlist_items?id=eq.{item_id}", a, {"rescout_frequency": "daily"})
