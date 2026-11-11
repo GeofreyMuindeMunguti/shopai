@@ -5,7 +5,7 @@ The Scout frontend (`frontend/`, Vite + React + TanStack Router + Tailwind v4 + 
 
 ## Metadata
 - **Feature Name**: Mobile responsiveness
-- **Status**: Draft
+- **Status**: Approved
 - **Priority**: P1 - High
 - **Owner**: TBD
 - **Epic/Initiative**: GitHub issue #2 (GeofreyMuindeMunguti/shopai)
@@ -114,12 +114,17 @@ Files expected **not** to need changes (already responsive): `routes/login.tsx`,
 - Screenshots of 360px and 1440px for the header, wishlist detail and one admin table page go in the PR (UI change).
 
 ## Open Questions
-- [ ] **Admin nav on mobile**: horizontally scrollable pill row (proposed default) or a Sheet/drawer behind an "Admin menu" button? Or should admin items go into the main mobile nav sheet as a sub-section?
-- [ ] **Collapse breakpoint**: is `md` (768px) right for both the header and the admin sidebar, or should the admin sidebar collapse below `lg` (1024px) to give tables more room on tablets?
-- [ ] **Admin portal scope**: is the admin portal expected to be fully usable on phones, or is "no page-level overflow and reachable nav, tables scroll horizontally" enough? (This spec assumes the latter.)
-- [ ] **Minimum width**: is 360px the right floor, or must 320px (iPhone SE first gen) also be supported?
-- [ ] **Mobile nav content**: should the mobile sheet also hold account actions (Settings / Sign out), or do those stay only in the avatar dropdown? (This spec assumes they stay in the avatar dropdown.)
-- [ ] **Specific reported pages**: the issue gives no pages, devices or screenshots. Are there particular screens the reporter saw breaking that need priority?
+All resolved at approval (2026-11-11) — see Decision Log.
+
+## Decision Log
+| Date | Decision | Rationale |
+|------|----------|-----------|
+| 2026-11-11 | Admin nav below `md` is a horizontally scrollable pill row (no Sheet) | Chosen by approver |
+| 2026-11-11 | Header and admin sidebar both collapse below `md` (768px) | Spec default accepted |
+| 2026-11-11 | Admin on phones: no page-level overflow, nav reachable, tables scroll inside their container | Spec default accepted |
+| 2026-11-11 | 360px is the minimum supported width | Spec default accepted |
+| 2026-11-11 | Settings / Sign out stay in the avatar dropdown only | Spec default accepted |
+| 2026-11-11 | All routes in scope; no specific pages prioritised | Spec default accepted |
 
 ## References
 - GitHub issue #2: https://github.com/GeofreyMuindeMunguti/shopai/issues/2
