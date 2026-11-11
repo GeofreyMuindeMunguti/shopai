@@ -19,7 +19,7 @@ COMPOSE_CMD=docker compose $(foreach file,$(COMPOSE_FILES),-f $(file))
 # brings up Temporal + worker + frontend via docker compose.
 up:
 	@set -a; [ -f .env ] && . ./.env; set +a; supabase start
-	@eval "$$(./scripts/supabase-env.sh)"; $(COMPOSE_CMD) up -d
+	@eval "$$(./scripts/supabase-env.sh)"; $(COMPOSE_CMD) up -d --build
 	@echo ""
 	@echo "Stack up. Frontend http://localhost:3000 | Temporal UI http://localhost:8080 | Supabase Studio http://localhost:54323"
 
