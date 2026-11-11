@@ -61,7 +61,7 @@ function SettingsPage() {
   const { user } = useAuth();
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 p-6">
+    <div className="mx-auto max-w-4xl space-y-6 p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Settings</h1>
       <Tabs value={tab} onValueChange={(t) => navigate({ search: { tab: t as Tab } })}>
         <TabsList>
@@ -218,7 +218,7 @@ function NotificationSettings() {
           <ul className="divide-y">
             {data.map((n) => (
               <li key={n.id} className={cn('flex items-start justify-between gap-4 py-3', !n.read_at && 'font-medium')}>
-                <div>
+                <div className="min-w-0 break-words">
                   <p>
                     {!n.read_at && <span className="sr-only">Unread: </span>}
                     {n.title}

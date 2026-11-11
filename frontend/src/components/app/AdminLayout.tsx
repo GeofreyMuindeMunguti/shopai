@@ -18,6 +18,7 @@ import {
   SidebarMenuItem,
   sidebarMenuButtonClass,
 } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 
 export const ADMIN_NAV = [
   { to: '/admin/models', label: 'AI models', icon: Bot },
@@ -35,8 +36,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const current = ADMIN_NAV.find((n) => pathname.startsWith(n.to));
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)]">
-      <Sidebar aria-label="Admin">
+    <div className="flex min-h-[calc(100vh-4rem)] flex-col md:flex-row">
+      <Sidebar aria-label="Admin" className="hidden md:flex">
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Admin</SidebarGroupLabel>
@@ -56,7 +57,24 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
-      <div className="min-w-0 flex-1 space-y-6 p-6">
+      <div className="min-w-0 flex-1 space-y-6 p-4 sm:p-6">
+        {/* Below md the sidebar is hidden; the same links render as a scrollable pill row. */}
+        <nav aria-label="Admin" className="-mx-4 flex gap-1 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:px-6 md:hidden">
+          {ADMIN_NAV.map((n) => {
+            const Icon = n.icon;
+            const active = pathname.startsWith(n.to);
+            return (
+              <Link
+                key={n.to}
+                to={n.to}
+                className={cn(sidebarMenuButtonClass(active), 'min-h-10 w-auto shrink-0 whitespace-nowrap')}
+                aria-current={active ? 'page' : undefined}
+              >
+                <Icon aria-hidden /> {n.label}
+              </Link>
+            );
+          })}
+        </nav>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>

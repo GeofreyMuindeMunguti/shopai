@@ -73,7 +73,7 @@ export function CandidateCard({ match, retailerName, displayCurrency, fx, isNew,
       </div>
 
       <CardContent className="flex flex-1 flex-col gap-2 p-4">
-        <h4 id={titleId} className="line-clamp-2 font-medium leading-snug">
+        <h4 id={titleId} className="line-clamp-2 break-words font-medium leading-snug">
           {match.title}
         </h4>
         <div className="flex flex-wrap items-center gap-1.5 text-sm">

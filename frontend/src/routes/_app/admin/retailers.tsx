@@ -56,10 +56,10 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
   const isShopify = retailer.code === 'shopify';
 
   return (
-    <Card>
-      <CardHeader className="flex-row items-center justify-between space-y-0">
-        <CardTitle className="text-lg">
-          <h2>
+    <Card className="min-w-0">
+      <CardHeader className="flex-row items-center justify-between gap-2 space-y-0">
+        <CardTitle className="min-w-0 text-lg">
+          <h2 className="break-words">
             {retailer.display_name} <code className="text-xs font-normal text-muted-foreground">{retailer.adapter_key}</code>
           </h2>
         </CardTitle>
@@ -76,7 +76,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
       </CardHeader>
       <CardContent className="space-y-3">
         {COUNTRIES.map((c) => (
-          <div key={c.code} className="grid grid-cols-[6rem_1fr_auto] items-center gap-2">
+          <div key={c.code} className="grid grid-cols-[6rem_minmax(0,1fr)_auto] items-center gap-2">
             <Label htmlFor={`domain-${retailer.code}-${c.code}`}>{c.name}</Label>
             <Input
               id={`domain-${retailer.code}-${c.code}`}

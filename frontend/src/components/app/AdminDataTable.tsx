@@ -62,7 +62,7 @@ export function AdminDataTable<T>({
           placeholder={searchPlaceholder}
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
-          className="max-w-xs"
+          className="w-full sm:max-w-xs"
         />
         {toolbar}
       </div>

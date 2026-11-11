@@ -271,7 +271,7 @@ function ModelFormDialog({
             <Label htmlFor="model-ref">Bedrock model / inference-profile ID</Label>
             <Input id="model-ref" value={form.bedrock_model_id} onChange={(e) => set('bedrock_model_id', e.target.value)} required className="font-mono" />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="model-max">Max output tokens</Label>
               <Input id="model-max" type="number" min={1} value={form.max_output_tokens} onChange={(e) => set('max_output_tokens', Number(e.target.value))} required />
