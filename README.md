@@ -1,3 +1,8 @@
+# App running locally
+
+<img width="1288" height="814" alt="image" src="https://github.com/user-attachments/assets/59a9a499-d22b-44fb-86c2-4842cc283103" />
+
+
 # Scout: AI shopping wishlist
 
 Users sign in with Google, describe what they want to buy, and an LLM agent on AWS Bedrock searches the retailers they picked (Takealot, Amazon, Temu, Jumia and independent Shopify stores) across Kenya, the United States and South Africa. Verified candidates appear on the wishlist for the user to approve, reject or save, and items can be re-scouted daily or weekly.
