@@ -122,9 +122,9 @@ function WishlistPage() {
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold">{w.name}</h1>
-          {w.description && <p className="text-muted-foreground">{w.description}</p>}
+        <div className="min-w-0 space-y-1">
+          <h1 className="break-words text-2xl font-semibold">{w.name}</h1>
+          {w.description && <p className="break-words text-muted-foreground">{w.description}</p>}
           {resolved.data?.display_name && (
             <Badge variant="outline" className="gap-1">
               <Bot className="h-3 w-3" aria-hidden /> {resolved.data.display_name}

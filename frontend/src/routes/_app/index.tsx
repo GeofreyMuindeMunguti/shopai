@@ -67,7 +67,7 @@ function WishlistsPage() {
       {wishlists.data && wishlists.data.length > 0 && (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {wishlists.data.map((w) => (
-            <li key={w.id}>
+            <li key={w.id} className="min-w-0">
               <Link
                 to="/wishlists/$wishlistId"
                 params={{ wishlistId: w.id }}
@@ -76,13 +76,13 @@ function WishlistsPage() {
                 <Card className="h-full transition-colors hover:bg-muted/40">
                   <CardHeader>
                     <CardTitle className="text-lg">
-                      <h2>{w.name}</h2>
+                      <h2 className="break-words">{w.name}</h2>
                     </CardTitle>
                     <CardDescription>
                       {w.wishlist_items?.[0]?.count ?? 0} items
                       {modelName(w.model_id) ? ` · ${modelName(w.model_id)}` : ''}
                     </CardDescription>
-                    {w.description && <p className="line-clamp-2 text-sm">{w.description}</p>}
+                    {w.description && <p className="line-clamp-2 break-words text-sm">{w.description}</p>}
                   </CardHeader>
                 </Card>
               </Link>

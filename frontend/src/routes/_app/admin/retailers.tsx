@@ -56,10 +56,10 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
   const isShopify = retailer.code === 'shopify';
 
   return (
-    <Card>
-      <CardHeader className="flex-row items-center justify-between space-y-0">
-        <CardTitle className="text-lg">
-          <h2>
+    <Card className="min-w-0">
+      <CardHeader className="flex-row items-center justify-between gap-2 space-y-0">
+        <CardTitle className="min-w-0 text-lg">
+          <h2 className="break-words">
             {retailer.display_name} <code className="text-xs font-normal text-muted-foreground">{retailer.adapter_key}</code>
           </h2>
         </CardTitle>
