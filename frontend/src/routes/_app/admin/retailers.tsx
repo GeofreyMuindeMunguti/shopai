@@ -76,7 +76,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
       </CardHeader>
       <CardContent className="space-y-3">
         {COUNTRIES.map((c) => (
-          <div key={c.code} className="grid grid-cols-[6rem_1fr_auto] items-center gap-2">
+          <div key={c.code} className="grid grid-cols-[6rem_minmax(0,1fr)_auto] items-center gap-2">
             <Label htmlFor={`domain-${retailer.code}-${c.code}`}>{c.name}</Label>
             <Input
               id={`domain-${retailer.code}-${c.code}`}

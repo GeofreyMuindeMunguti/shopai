@@ -60,11 +60,11 @@ export function OnboardingStepper({ steps, current, children, canContinue, busy,
           {step.description && <CardDescription>{step.description}</CardDescription>}
         </CardHeader>
         <CardContent>{children}</CardContent>
-        <CardFooter className="justify-between gap-2">
+        <CardFooter className="flex-wrap justify-between gap-2">
           <Button variant="ghost" onClick={onBack} disabled={current === 0 || busy}>
             Back
           </Button>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {step.optional && onSkip && (
               <Button variant="outline" onClick={onSkip} disabled={busy}>
                 Skip

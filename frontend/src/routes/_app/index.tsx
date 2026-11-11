@@ -26,7 +26,7 @@ function WishlistsPage() {
   const modelName = (id: string | null) => models.data?.find((m) => m.id === id)?.display_name;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-6">
+    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">My Wishlists</h1>

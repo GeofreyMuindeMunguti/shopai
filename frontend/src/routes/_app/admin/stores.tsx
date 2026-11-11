@@ -95,10 +95,10 @@ function StoresPage() {
     <div className="space-y-6">
       <AdminPageHeader title="Shopify stores" description="Stores found by the discovery agent and passed by the quality gate. Shared across all users." />
       <div className="flex flex-wrap items-end gap-3">
-        <div className="space-y-1">
+        <div className="w-full space-y-1 sm:w-auto">
           <Label htmlFor="store-status">Status</Label>
           <Select value={filters.status} onValueChange={(status) => setFilters({ ...filters, status })}>
-            <SelectTrigger id="store-status" className="w-40">
+            <SelectTrigger id="store-status" className="w-full sm:w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -109,10 +109,10 @@ function StoresPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-1">
+        <div className="w-full space-y-1 sm:w-auto">
           <Label htmlFor="store-country">Ships to</Label>
           <Select value={filters.country} onValueChange={(country) => setFilters({ ...filters, country })}>
-            <SelectTrigger id="store-country" className="w-44">
+            <SelectTrigger id="store-country" className="w-full sm:w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -125,9 +125,9 @@ function StoresPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-1">
+        <div className="w-full space-y-1 sm:w-auto">
           <Label htmlFor="store-category">Category (exact taxonomy path)</Label>
-          <Input id="store-category" className="w-72" value={filters.category} onChange={(e) => setFilters({ ...filters, category: e.target.value })} placeholder="Apparel & Accessories > Shoes" />
+          <Input id="store-category" className="w-full sm:w-72" value={filters.category} onChange={(e) => setFilters({ ...filters, category: e.target.value })} placeholder="Apparel & Accessories > Shoes" />
         </div>
       </div>
       {stores.error && <ErrorState error={stores.error} />}

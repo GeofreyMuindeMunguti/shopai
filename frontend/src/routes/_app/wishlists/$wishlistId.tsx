@@ -98,7 +98,7 @@ function WishlistPage() {
   const runsByItem = useMemo(() => groupBy<ScoutRun>(runs.data, (r) => r.wishlist_item_id), [runs.data]);
 
   if (wishlist.isLoading) return <FullPageSpinner />;
-  if (wishlist.error || !wishlist.data) return <div className="p-6"><ErrorState error={wishlist.error ?? 'Wishlist not found'} /></div>;
+  if (wishlist.error || !wishlist.data) return <div className="p-4 sm:p-6"><ErrorState error={wishlist.error ?? 'Wishlist not found'} /></div>;
 
   const w = wishlist.data;
   const displayCurrency = profile?.currency ?? w.default_currency;
@@ -116,7 +116,7 @@ function WishlistPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-6">
+    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
       <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" aria-hidden /> My Wishlists
       </Link>
@@ -131,7 +131,7 @@ function WishlistPage() {
             </Badge>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={() => setEditWishlist(true)}>
             <Pencil aria-hidden /> Edit wishlist
           </Button>

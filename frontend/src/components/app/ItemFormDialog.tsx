@@ -153,7 +153,7 @@ export function ItemFormDialog({
             <Label htmlFor="item-url">Reference link</Label>
             <Input id="item-url" type="url" inputMode="url" value={referenceUrl} onChange={(e) => setReferenceUrl(e.target.value)} placeholder="https://…" />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="item-max-price">Max price</Label>
               <Input id="item-max-price" type="number" min="0" step="any" inputMode="decimal" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
@@ -174,7 +174,7 @@ export function ItemFormDialog({
               </Select>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="item-brands">Brands</Label>
               <Input id="item-brands" value={brands} onChange={(e) => setBrands(e.target.value)} placeholder="Sony, Bose" aria-describedby="brands-hint" />
@@ -183,9 +183,9 @@ export function ItemFormDialog({
               <Label htmlFor="item-exclude">Exclude brands</Label>
               <Input id="item-exclude" value={excludeBrands} onChange={(e) => setExcludeBrands(e.target.value)} aria-describedby="brands-hint" />
             </div>
-            <p id="brands-hint" className="col-span-2 text-xs text-muted-foreground">Separate brands with commas.</p>
+            <p id="brands-hint" className="text-xs sm:col-span-2 text-muted-foreground">Separate brands with commas.</p>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="item-condition">Condition</Label>
               <Select value={condition} onValueChange={(v) => setCondition(v as Condition)}>
@@ -243,7 +243,7 @@ export function ItemFormDialog({
               </Label>
             </div>
             {overrideRetailers && (
-              <div className="grid grid-cols-2 gap-2 pl-6">
+              <div className="grid grid-cols-1 gap-2 pl-6 sm:grid-cols-2">
                 {available.map((r) => (
                   <div key={r.code} className="flex items-center gap-2">
                     <Checkbox
