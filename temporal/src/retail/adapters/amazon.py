@@ -86,10 +86,17 @@ class AmazonAdapter(RetailerAdapter):
     def search(self, query: str, country: str, domain: str, max_results: int = 8) -> list[SearchHit]:
         if self.ctx.amazon_credentials:
             try:
-                data = self._api(domain, "SearchItems", {"Keywords": query, "ItemCount": min(max_results, 10)})
-                items = data.get("SearchResult", {}).get("Items", [])
+                # SearchItems returns at most 10 per page; ItemCount must stay fixed across pages (offset = page * count).
+                per_page = min(max_results, 10)
+                items: list[dict[str, Any]] = []
+                for page in range(1, -(-max_results // per_page) + 1):
+                    data = self._api(domain, "SearchItems", {"Keywords": query, "ItemCount": per_page, "ItemPage": page})
+                    batch = data.get("SearchResult", {}).get("Items", [])
+                    items.extend(batch)
+                    if len(batch) < per_page or len(items) >= max_results:
+                        break
                 return [SearchHit(url=i["DetailPageURL"], title=i.get("ItemInfo", {}).get("Title", {}).get("DisplayValue", ""))
-                        for i in items if i.get("DetailPageURL")]
+                        for i in items[:max_results] if i.get("DetailPageURL")]
             except AdapterError as exc:
                 logger.warning("amazon api search failed, falling back to web search error=%s", exc)
         return super().search(query, country, domain, max_results)

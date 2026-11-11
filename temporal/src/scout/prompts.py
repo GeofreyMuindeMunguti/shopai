@@ -4,6 +4,7 @@ import json
 from typing import Any
 
 MAX_TOOL_OUTPUT_CHARS = 4000
+MAX_SEARCH_OUTPUT_CHARS = 12000  # room for MAX_SEARCH_RESULTS rows with short snippets
 UNTRUSTED_OPEN = "<<<UNTRUSTED_WEB_CONTENT"
 UNTRUSTED_CLOSE = "UNTRUSTED_WEB_CONTENT>>>"
 
@@ -12,11 +13,11 @@ def truncate(text: str, limit: int = MAX_TOOL_OUTPUT_CHARS) -> str:
     return text if len(text) <= limit else text[: limit - 20] + " …[truncated]"
 
 
-def untrusted(payload: Any) -> str:
+def untrusted(payload: Any, limit: int = MAX_TOOL_OUTPUT_CHARS) -> str:
     """Delimit web-derived data. Delimiter look-alikes inside the content are neutralised."""
     body = payload if isinstance(payload, str) else json.dumps(payload, ensure_ascii=False, default=str)
     body = body.replace(UNTRUSTED_OPEN, "<<<").replace(UNTRUSTED_CLOSE, ">>>")
-    return truncate(f"{UNTRUSTED_OPEN}\n{body}\n{UNTRUSTED_CLOSE}")
+    return truncate(f"{UNTRUSTED_OPEN}\n{body}\n{UNTRUSTED_CLOSE}", limit)
 
 
 def item_spec(item: dict[str, Any], country: str, currency: str | None) -> dict[str, Any]:

@@ -10,8 +10,9 @@ with workflow.unsafe.imports_passed_through():
     from ..activities.llm import llm_converse
     from ..activities.retail import discover_stores, fetch_product_page, retailer_search, verify_candidate
     from ..retail.canonical import canonicalize_url, host_matches
-    from ..scout.prompts import kickoff_message, system_prompt, truncate, untrusted
-    from ..scout.tools import MAX_CANDIDATES_PER_RETAILER, tool_specs, validate_submit
+    from ..scout.prompts import (MAX_SEARCH_OUTPUT_CHARS, MAX_TOOL_OUTPUT_CHARS, kickoff_message, system_prompt,
+                                  truncate, untrusted)
+    from ..scout.tools import MAX_CANDIDATES_PER_RETAILER, MAX_SEARCH_RESULTS, tool_specs, validate_submit
     from ..scout.types import CandidateSummary, RetailerScoutInput, RetailerScoutResult
     from .common import LLM_RETRY, LLM_TIMEOUT, RETAIL_RETRY, RETAIL_TIMEOUT, classify, db_call
 
@@ -96,7 +97,8 @@ class ScoutRetailerWorkflow:
                 r.tool_calls += 1
                 content, is_error, finished = await self._tool(inp, r, call["name"], call.get("input") or {})
                 done = done or finished
-                results.append({"type": "tool_result", "tool_use_id": call["id"], "content": truncate(content),
+                limit = MAX_SEARCH_OUTPUT_CHARS if call["name"] == "retailer_search" else MAX_TOOL_OUTPUT_CHARS
+                results.append({"type": "tool_result", "tool_use_id": call["id"], "content": truncate(content, limit),
                                 "is_error": is_error})
             messages.append({"role": "user", "content": results})
             if done:
@@ -138,7 +140,7 @@ class ScoutRetailerWorkflow:
         res = await workflow.execute_activity(
             retailer_search,
             {"retailer": inp.retailer, "query": query, "country": inp.country_code,
-             "max_results": min(int(args.get("max_results") or 6), 10), "store_domain": store},
+             "max_results": min(int(args.get("max_results") or 6), MAX_SEARCH_RESULTS), "store_domain": store},
             start_to_close_timeout=RETAIL_TIMEOUT, retry_policy=RETAIL_RETRY,
         )
         if not res["ok"]:
@@ -147,8 +149,9 @@ class ScoutRetailerWorkflow:
             self._known_urls.add(canonicalize_url(hit["url"]))
         if not res["results"]:
             return "No results. Try different search terms.", False, False
-        rows = [{"url": h["url"], "title": h.get("title"), "snippet": h.get("snippet")} for h in res["results"]]
-        return untrusted(rows), False, False
+        rows = [{"url": h["url"], "title": h.get("title"), "snippet": (h.get("snippet") or "")[:150]}
+                for h in res["results"]]
+        return untrusted(rows, MAX_SEARCH_OUTPUT_CHARS), False, False
 
     async def _fetch(self, inp: RetailerScoutInput, r: RetailerScoutResult, args: dict[str, Any]) -> tuple[str, bool, bool]:
         url = str(args.get("url") or "").strip()
