@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { NotificationsBell } from '@/components/app/NotificationsBell';
 import { ErrorState, FullPageSpinner } from '@/components/app/PageState';
 import { useProfile } from '@/data/queries';
@@ -33,7 +33,7 @@ function AppLayout() {
   if (isLoading) return <FullPageSpinner />;
   if (!session) return <Navigate to="/login" />;
   if (profile.isLoading) return <FullPageSpinner label="Loading your profile…" />;
-  if (profile.error) return <div className="p-6"><ErrorState error={profile.error} /></div>;
+  if (profile.error) return <div className="p-4 sm:p-6"><ErrorState error={profile.error} /></div>;
   if (!profile.data?.onboarding_completed_at) return <Navigate to="/onboarding" />;
 
   return (
@@ -95,19 +95,13 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 border-b bg-card">
       <div className="flex h-16 items-center gap-2 px-4 sm:gap-4 sm:px-6">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          aria-label="Open menu"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-nav"
-          onClick={() => setMenuOpen(true)}
-        >
-          <Menu aria-hidden />
-        </Button>
         <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-          <SheetContent id="mobile-nav" side="left" aria-describedby={undefined}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+              <Menu aria-hidden />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" aria-describedby={undefined}>
             <SheetTitle className="flex items-center gap-2 text-lg font-semibold">
               <ShoppingBag className="h-5 w-5 text-primary" aria-hidden /> Scout
             </SheetTitle>

@@ -71,7 +71,7 @@ function OnboardingPage() {
 
   if (isLoading || profile.isLoading) return <FullPageSpinner />;
   if (!session) return <Navigate to="/login" />;
-  if (profile.error) return <div className="p-6"><ErrorState error={profile.error} /></div>;
+  if (profile.error) return <div className="p-4 sm:p-6"><ErrorState error={profile.error} /></div>;
   if (profile.data?.onboarding_completed_at) return <Navigate to="/" />;
 
   const googleEmail = profile.data?.email ?? user?.email ?? '';

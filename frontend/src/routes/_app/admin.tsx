@@ -15,7 +15,7 @@ function AdminRoute() {
   const { isAdmin } = useAuth();
   if (!isAdmin) {
     return (
-      <div className="mx-auto max-w-xl p-6">
+      <div className="mx-auto max-w-xl p-4 sm:p-6">
         <Alert variant="destructive">
           <AlertTitle>Admins only</AlertTitle>
           <AlertDescription>Your account doesn't have access to the admin portal.</AlertDescription>

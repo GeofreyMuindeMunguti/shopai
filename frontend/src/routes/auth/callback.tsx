@@ -26,7 +26,7 @@ function AuthCallback() {
   if (session) return <Navigate to="/" />;
   if (error || timedOut) {
     return (
-      <main className="mx-auto max-w-md p-6">
+      <main className="mx-auto max-w-md p-4 sm:p-6">
         <Alert variant="destructive">
           <AlertTitle>Sign-in didn't complete</AlertTitle>
           <AlertDescription>
