@@ -40,3 +40,5 @@ temporal/worker/node_modules.bak*
 volaris_test_data-main
 
 *.txt
+# Claude Code local worktrees
+.claude/worktrees/
