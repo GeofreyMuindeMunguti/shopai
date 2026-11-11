@@ -4,7 +4,8 @@
  * Executes declarative actions defined in JSON page definitions
  */
 
-import type { NavigateFunction } from '@tanstack/react-router';
+/** JSON pages navigate to paths computed at runtime, so routes aren't type-checked here. */
+export type NavigateFunction = (options: { to: string; replace?: boolean }) => unknown;
 import type { QueryClient } from '@tanstack/react-query';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
@@ -29,6 +30,15 @@ export type CustomActionHandler = (
   payload: unknown,
   context: ExpressionContext
 ) => Promise<void> | void;
+
+/**
+ * App-wide custom handlers (e.g. "toast"), available to every page.
+ */
+const globalActionHandlers: Record<string, CustomActionHandler> = {};
+
+export function registerActionHandler(name: string, handler: CustomActionHandler): void {
+  globalActionHandlers[name] = handler;
+}
 
 /**
  * Action dispatcher configuration
@@ -56,8 +66,9 @@ export function createActionDispatcher(config: ActionDispatcherConfig) {
     refetch,
     openModal,
     closeModal,
-    customHandlers = {},
+    customHandlers: localHandlers = {},
   } = config;
+  const customHandlers = { ...globalActionHandlers, ...localHandlers };
 
   /**
    * Dispatch an action
@@ -144,7 +155,9 @@ export function createActionDispatcher(config: ActionDispatcherConfig) {
 
         case 'upsert':
           if (!action.table) throw new Error('Table required for upsert');
-          result = await supabase.from(action.table).upsert(data as Record<string, unknown>[]);
+          result = await supabase
+            .from(action.table)
+            .upsert(data as Record<string, unknown>[], action.onConflict ? { onConflict: action.onConflict } : undefined);
           break;
 
         case 'delete':

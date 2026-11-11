@@ -5,7 +5,7 @@
  * Handles conditionals (if), loops (each), and expression evaluation
  */
 
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 import { getGlobalRegistry } from '@/registry/createRegistry';
 import {
   evaluateExpression,

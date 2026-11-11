@@ -195,6 +195,8 @@ export interface ApiCallAction {
   data?: unknown;
   /** Match criteria for update/delete */
   match?: Record<string, unknown>;
+  /** Conflict target for upsert (comma-separated columns of a unique constraint) */
+  onConflict?: string;
   /** Action to run on success */
   onSuccess?: ActionDefinition;
   /** Action to run on error */

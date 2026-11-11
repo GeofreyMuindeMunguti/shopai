@@ -46,7 +46,11 @@ export function UIEngine({ page, params = {} }: UIEngineProps) {
   >({});
 
   // Router navigation
-  const navigate = useNavigate();
+  const routerNavigate = useNavigate();
+  const navigate = useCallback(
+    (options: { to: string; replace?: boolean }) => routerNavigate(options as Parameters<typeof routerNavigate>[0]),
+    [routerNavigate]
+  );
 
   // Query client for cache invalidation
   const queryClient = useQueryClient();

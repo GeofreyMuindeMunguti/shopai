@@ -17,6 +17,11 @@
   --color-accent-foreground: hsl(222.2 47.4% 11.2%);
   --color-destructive: hsl(0 84.2% 60.2%);
   --color-destructive-foreground: hsl(210 40% 98%);
+  /* Status colours (match verified / attention). AA contrast on white and on their tint. */
+  --color-success: hsl(142 72% 26%);
+  --color-success-foreground: hsl(0 0% 100%);
+  --color-warning: hsl(32 95% 30%);
+  --color-warning-foreground: hsl(0 0% 100%);
   --color-border: hsl(214.3 31.8% 91.4%);
   --color-input: hsl(214.3 31.8% 91.4%);
   --color-ring: hsl(222.2 84% 4.9%);

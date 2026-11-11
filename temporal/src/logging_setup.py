@@ -57,3 +57,6 @@ def configure_logging(s: Settings, level: int = logging.INFO) -> None:
     root = logging.getLogger()
     root.handlers[:] = [handler]
     root.setLevel(level)
+    # httpx logs every request at INFO; the dispatcher polls every few seconds, so
+    # keep only its warnings. Our own activity logs already record the calls that matter.
+    logging.getLogger("httpx").setLevel(logging.WARNING)

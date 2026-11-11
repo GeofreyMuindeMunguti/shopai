@@ -18,7 +18,7 @@ COMPOSE_CMD=docker compose $(foreach file,$(COMPOSE_FILES),-f $(file))
 # Storage + Studio) via the Supabase CLI, applying migrations and seed, THEN
 # brings up Temporal + worker + frontend via docker compose.
 up:
-	supabase start
+	@set -a; [ -f .env ] && . ./.env; set +a; supabase start
 	@eval "$$(./scripts/supabase-env.sh)"; $(COMPOSE_CMD) up -d
 	@echo ""
 	@echo "Stack up. Frontend http://localhost:3000 | Temporal UI http://localhost:8080 | Supabase Studio http://localhost:54323"

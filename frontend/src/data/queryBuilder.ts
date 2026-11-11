@@ -12,11 +12,14 @@ import type {
 } from '@/engine/types';
 import { evaluateExpression } from '@/engine/ExpressionEvaluator';
 
+/** A select() query that filters, ordering and limits can be chained onto. */
+type FilterQuery = ReturnType<ReturnType<SupabaseClient['from']>['select']>;
+
 /**
  * Apply a filter to a Supabase query
  */
 function applyFilter(
-  query: ReturnType<SupabaseClient['from']>,
+  query: FilterQuery,
   filter: FilterDefinition,
   context: ExpressionContext
 ) {
@@ -62,12 +65,14 @@ export function buildSupabaseQuery(
   context: ExpressionContext
 ) {
   // Start with the table and select
-  let query = client.from(source.table).select(source.select || '*');
+  // The select string is only known at runtime, so widen away supabase-js's
+  // compile-time parsing of it (which otherwise yields GenericStringError rows).
+  let query = client.from(source.table).select(source.select || '*') as unknown as FilterQuery;
 
   // Apply filters
   if (source.filters) {
     for (const filter of source.filters) {
-      query = applyFilter(query, filter, context) as typeof query;
+      query = applyFilter(query, filter, context) as FilterQuery;
     }
   }
 

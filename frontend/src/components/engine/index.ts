@@ -30,3 +30,13 @@ export { EngineSkeleton as Skeleton } from './feedback/EngineSkeleton';
 
 // Data
 export { EngineBadge as Badge } from './data/EngineBadge';
+
+// Scout domain components
+export {
+  EngineCandidateCard as CandidateCard,
+  EngineModelSelector as ModelSelector,
+  EngineRetailerProgress as RetailerProgress,
+  EnginePriceWithConversion as PriceWithConversion,
+  EngineSwitch as Switch,
+  EngineFormattedText as FormattedText,
+} from './app/EngineAppComponents';

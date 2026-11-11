@@ -29,7 +29,7 @@ export {
 } from './ExpressionEvaluator';
 
 // Action dispatcher
-export { createActionDispatcher } from './ActionDispatcher';
+export { createActionDispatcher, registerActionHandler } from './ActionDispatcher';
 export type { ActionDispatch, CustomActionHandler, ActionDispatcherConfig } from './ActionDispatcher';
 
 // Data sources

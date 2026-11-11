@@ -4,14 +4,13 @@
  * Manages data fetching for all data sources defined in a page
  */
 
-import { useQueries, useQueryClient } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { useMemo, useCallback } from 'react';
 import { supabase } from '@/data/supabase';
 import { executeSupabaseQuery, createQueryKey } from '@/data/queryBuilder';
 import { evaluateExpression } from './ExpressionEvaluator';
 import type {
   DataSourceDefinition,
-  SupabaseDataSource,
   ApiDataSource,
   StaticDataSource,
   ExpressionContext,
@@ -75,8 +74,6 @@ export function useDataSources(
   dataSources: Record<string, DataSourceDefinition> | undefined,
   context: ExpressionContext
 ): UseDataSourcesResult {
-  const queryClient = useQueryClient();
-
   // Create query configurations for each data source
   const sourceEntries = useMemo(() => {
     return Object.entries(dataSources || {});

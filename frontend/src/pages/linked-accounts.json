@@ -1,0 +1,237 @@
+{
+  "id": "linked-accounts",
+  "title": "Linked shopping accounts",
+  "state": {
+    "linkRetailer": null,
+    "linkEmail": "",
+    "linkMethod": "google_sso"
+  },
+  "dataSources": {
+    "accounts": {
+      "type": "supabase",
+      "table": "merchant_accounts",
+      "select": "id, retailer_code, account_email, login_method, status, created_at, retailers(display_name)",
+      "filters": [{ "field": "status", "op": "eq", "value": "linked" }],
+      "order": [{ "column": "retailer_code" }]
+    },
+    "retailerOptions": {
+      "type": "supabase",
+      "table": "retailers",
+      "select": "value:code, label:display_name",
+      "filters": [{ "field": "is_enabled", "op": "eq", "value": true }],
+      "order": [{ "column": "display_name" }]
+    },
+    "profile": {
+      "type": "supabase",
+      "table": "user_profiles",
+      "select": "email",
+      "filters": [{ "field": "user_id", "op": "eq", "value": "{{params.userId}}" }],
+      "single": true
+    },
+    "loginMethods": {
+      "type": "static",
+      "data": [
+        { "value": "google_sso", "label": "Sign in with Google" },
+        { "value": "email", "label": "Email and password" }
+      ]
+    }
+  },
+  "layout": {
+    "type": "Card",
+    "children": [
+      {
+        "type": "Stack",
+        "props": { "spacing": 4 },
+        "children": [
+          {
+            "type": "Stack",
+            "props": { "direction": "horizontal", "justify": "between", "align": "center", "wrap": true },
+            "children": [
+              {
+                "type": "Stack",
+                "props": { "spacing": 1 },
+                "children": [
+                  { "type": "Heading", "props": { "level": 2, "children": "Linked shopping accounts" } },
+                  {
+                    "type": "Text",
+                    "props": {
+                      "variant": "muted",
+                      "size": "sm",
+                      "children": "Recorded for later automation only. We never store retailer passwords, and no action uses these accounts yet."
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Button",
+                "props": {
+                  "children": "Link account",
+                  "onClick": {
+                    "action": "sequence",
+                    "actions": [
+                      { "action": "setState", "key": "linkEmail", "value": "{{data.profile.email}}" },
+                      { "action": "setState", "key": "linkMethod", "value": "google_sso" },
+                      { "action": "setState", "key": "linkRetailer", "value": null },
+                      { "action": "openModal", "modalId": "linkAccount" }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "Text",
+            "if": "{{!data.accounts.length}}",
+            "props": { "variant": "muted", "children": "No accounts linked yet." }
+          },
+          {
+            "type": "Stack",
+            "each": "{{data.accounts}}",
+            "as": "account",
+            "key": "{{account.id}}",
+            "props": {
+              "direction": "horizontal",
+              "justify": "between",
+              "align": "center",
+              "className": "rounded-lg border p-3"
+            },
+            "children": [
+              {
+                "type": "Stack",
+                "props": { "spacing": 1 },
+                "children": [
+                  { "type": "Text", "props": { "weight": "medium", "children": "{{account.retailers.display_name || account.retailer_code}}" } },
+                  {
+                    "type": "Stack",
+                    "props": { "direction": "horizontal", "spacing": 2, "align": "center" },
+                    "children": [
+                      { "type": "FormattedText", "props": { "value": "{{account.account_email}}", "format": "maskedEmail", "className": "text-sm" } },
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "variant": "secondary",
+                          "children": "{{account.login_method === 'google_sso' ? 'Google sign-in' : 'Email'}}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Button",
+                "props": {
+                  "variant": "outline",
+                  "size": "sm",
+                  "children": "Unlink",
+                  "onClick": {
+                    "action": "apiCall",
+                    "operation": "update",
+                    "table": "merchant_accounts",
+                    "data": { "status": "unlinked" },
+                    "match": { "id": "{{account.id}}" },
+                    "onSuccess": {
+                      "action": "sequence",
+                      "actions": [
+                        { "action": "refetch", "source": "accounts" },
+                        { "action": "custom", "handler": "toast", "payload": { "type": "success", "title": "Account unlinked" } }
+                      ]
+                    },
+                    "onError": {
+                      "action": "custom",
+                      "handler": "toast",
+                      "payload": { "type": "error", "title": "Could not unlink", "description": "{{event.error.message}}" }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "modals": {
+    "linkAccount": {
+      "title": "Link a shopping account",
+      "description": "Defaults to your Google email, which covers stores where you use Sign in with Google.",
+      "size": "md",
+      "content": {
+        "type": "Stack",
+        "props": { "spacing": 4 },
+        "children": [
+          {
+            "type": "Select",
+            "props": {
+              "label": "Retailer",
+              "name": "link-retailer",
+              "required": true,
+              "options": "{{data.retailerOptions}}",
+              "value": "{{state.linkRetailer}}",
+              "onChange": { "action": "setState", "key": "linkRetailer", "value": "{{event.target.value}}" }
+            }
+          },
+          {
+            "type": "Input",
+            "props": {
+              "label": "Account email",
+              "name": "link-email",
+              "type": "email",
+              "required": true,
+              "value": "{{state.linkEmail}}",
+              "onChange": { "action": "setState", "key": "linkEmail", "value": "{{event.target.value}}" }
+            }
+          },
+          {
+            "type": "Select",
+            "props": {
+              "label": "How you sign in there",
+              "name": "link-method",
+              "options": "{{data.loginMethods}}",
+              "value": "{{state.linkMethod}}",
+              "onChange": { "action": "setState", "key": "linkMethod", "value": "{{event.target.value}}" }
+            }
+          },
+          {
+            "type": "Stack",
+            "props": { "direction": "horizontal", "justify": "end", "spacing": 2 },
+            "children": [
+              { "type": "Button", "props": { "variant": "outline", "children": "Cancel", "onClick": { "action": "closeModal", "modalId": "linkAccount" } } },
+              {
+                "type": "Button",
+                "props": {
+                  "children": "Link",
+                  "disabled": "{{!state.linkRetailer || !state.linkEmail}}",
+                  "onClick": {
+                    "action": "apiCall",
+                    "operation": "upsert",
+                    "table": "merchant_accounts",
+                    "onConflict": "user_id,retailer_code",
+                    "data": {
+                      "retailer_code": "{{state.linkRetailer}}",
+                      "account_email": "{{state.linkEmail}}",
+                      "login_method": "{{state.linkMethod}}",
+                      "status": "linked"
+                    },
+                    "onSuccess": {
+                      "action": "sequence",
+                      "actions": [
+                        { "action": "closeModal", "modalId": "linkAccount" },
+                        { "action": "refetch", "source": "accounts" },
+                        { "action": "custom", "handler": "toast", "payload": { "type": "success", "title": "Account linked" } }
+                      ]
+                    },
+                    "onError": {
+                      "action": "custom",
+                      "handler": "toast",
+                      "payload": { "type": "error", "title": "Could not link the account", "description": "{{event.error.message}}" }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -126,6 +126,8 @@ services:
       - VITE_SUPABASE_URL=${VITE_SUPABASE_URL:-http://localhost:54321}
       - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY:-dev-anon-key}
       - VITE_API_URL=${VITE_API_URL:-http://localhost:54321/functions/v1}
+      # Dev-only email/password login for local testing without Google credentials.
+      - VITE_ENABLE_DEV_LOGIN=${VITE_ENABLE_DEV_LOGIN:-false}
     ports:
       - "3000:3000"
 

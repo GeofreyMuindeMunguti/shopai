@@ -9,86 +9,401 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as EntitiesEntityTypeIndexRouteImport } from './routes/entities/$entityType/index'
-import { Route as EntitiesEntityTypeIdRouteImport } from './routes/entities/$entityType/$id'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppAdminRouteImport } from './routes/_app/admin'
+import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
+import { Route as AppWishlistsWishlistIdRouteImport } from './routes/_app/wishlists/$wishlistId'
+import { Route as AppAdminUsageRouteImport } from './routes/_app/admin/usage'
+import { Route as AppAdminTasksRouteImport } from './routes/_app/admin/tasks'
+import { Route as AppAdminStoresRouteImport } from './routes/_app/admin/stores'
+import { Route as AppAdminSettingsRouteImport } from './routes/_app/admin/settings'
+import { Route as AppAdminRetailersRouteImport } from './routes/_app/admin/retailers'
+import { Route as AppAdminModelsRouteImport } from './routes/_app/admin/models'
+import { Route as AppAdminJobsRouteImport } from './routes/_app/admin/jobs'
+import { Route as AppAdminAuditRouteImport } from './routes/_app/admin/audit'
 
-const IndexRoute = IndexRouteImport.update({
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EntitiesEntityTypeIndexRoute = EntitiesEntityTypeIndexRouteImport.update({
-  id: '/entities/$entityType/',
-  path: '/entities/$entityType/',
-  getParentRoute: () => rootRouteImport,
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
 } as any)
-const EntitiesEntityTypeIdRoute = EntitiesEntityTypeIdRouteImport.update({
-  id: '/entities/$entityType/$id',
-  path: '/entities/$entityType/$id',
-  getParentRoute: () => rootRouteImport,
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppWishlistsWishlistIdRoute = AppWishlistsWishlistIdRouteImport.update({
+  id: '/wishlists/$wishlistId',
+  path: '/wishlists/$wishlistId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminUsageRoute = AppAdminUsageRouteImport.update({
+  id: '/usage',
+  path: '/usage',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminTasksRoute = AppAdminTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminStoresRoute = AppAdminStoresRouteImport.update({
+  id: '/stores',
+  path: '/stores',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminSettingsRoute = AppAdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminRetailersRoute = AppAdminRetailersRouteImport.update({
+  id: '/retailers',
+  path: '/retailers',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminModelsRoute = AppAdminModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminJobsRoute = AppAdminJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminAuditRoute = AppAdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AppAdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/entities/$entityType/$id': typeof EntitiesEntityTypeIdRoute
-  '/entities/$entityType': typeof EntitiesEntityTypeIndexRoute
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
+  '/admin': typeof AppAdminRouteWithChildren
+  '/settings': typeof AppSettingsRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/': typeof AppIndexRoute
+  '/admin/audit': typeof AppAdminAuditRoute
+  '/admin/jobs': typeof AppAdminJobsRoute
+  '/admin/models': typeof AppAdminModelsRoute
+  '/admin/retailers': typeof AppAdminRetailersRoute
+  '/admin/settings': typeof AppAdminSettingsRoute
+  '/admin/stores': typeof AppAdminStoresRoute
+  '/admin/tasks': typeof AppAdminTasksRoute
+  '/admin/usage': typeof AppAdminUsageRoute
+  '/wishlists/$wishlistId': typeof AppWishlistsWishlistIdRoute
+  '/admin/': typeof AppAdminIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/entities/$entityType/$id': typeof EntitiesEntityTypeIdRoute
-  '/entities/$entityType': typeof EntitiesEntityTypeIndexRoute
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
+  '/settings': typeof AppSettingsRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/': typeof AppIndexRoute
+  '/admin/audit': typeof AppAdminAuditRoute
+  '/admin/jobs': typeof AppAdminJobsRoute
+  '/admin/models': typeof AppAdminModelsRoute
+  '/admin/retailers': typeof AppAdminRetailersRoute
+  '/admin/settings': typeof AppAdminSettingsRoute
+  '/admin/stores': typeof AppAdminStoresRoute
+  '/admin/tasks': typeof AppAdminTasksRoute
+  '/admin/usage': typeof AppAdminUsageRoute
+  '/wishlists/$wishlistId': typeof AppWishlistsWishlistIdRoute
+  '/admin': typeof AppAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/entities/$entityType/$id': typeof EntitiesEntityTypeIdRoute
-  '/entities/$entityType/': typeof EntitiesEntityTypeIndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
+  '/_app/admin': typeof AppAdminRouteWithChildren
+  '/_app/settings': typeof AppSettingsRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/admin/audit': typeof AppAdminAuditRoute
+  '/_app/admin/jobs': typeof AppAdminJobsRoute
+  '/_app/admin/models': typeof AppAdminModelsRoute
+  '/_app/admin/retailers': typeof AppAdminRetailersRoute
+  '/_app/admin/settings': typeof AppAdminSettingsRoute
+  '/_app/admin/stores': typeof AppAdminStoresRoute
+  '/_app/admin/tasks': typeof AppAdminTasksRoute
+  '/_app/admin/usage': typeof AppAdminUsageRoute
+  '/_app/wishlists/$wishlistId': typeof AppWishlistsWishlistIdRoute
+  '/_app/admin/': typeof AppAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/entities/$entityType/$id' | '/entities/$entityType'
+  fullPaths:
+    | '/login'
+    | '/onboarding'
+    | '/admin'
+    | '/settings'
+    | '/auth/callback'
+    | '/'
+    | '/admin/audit'
+    | '/admin/jobs'
+    | '/admin/models'
+    | '/admin/retailers'
+    | '/admin/settings'
+    | '/admin/stores'
+    | '/admin/tasks'
+    | '/admin/usage'
+    | '/wishlists/$wishlistId'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/entities/$entityType/$id' | '/entities/$entityType'
-  id: '__root__' | '/' | '/entities/$entityType/$id' | '/entities/$entityType/'
+  to:
+    | '/login'
+    | '/onboarding'
+    | '/settings'
+    | '/auth/callback'
+    | '/'
+    | '/admin/audit'
+    | '/admin/jobs'
+    | '/admin/models'
+    | '/admin/retailers'
+    | '/admin/settings'
+    | '/admin/stores'
+    | '/admin/tasks'
+    | '/admin/usage'
+    | '/wishlists/$wishlistId'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/login'
+    | '/onboarding'
+    | '/_app/admin'
+    | '/_app/settings'
+    | '/auth/callback'
+    | '/_app/'
+    | '/_app/admin/audit'
+    | '/_app/admin/jobs'
+    | '/_app/admin/models'
+    | '/_app/admin/retailers'
+    | '/_app/admin/settings'
+    | '/_app/admin/stores'
+    | '/_app/admin/tasks'
+    | '/_app/admin/usage'
+    | '/_app/wishlists/$wishlistId'
+    | '/_app/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  EntitiesEntityTypeIdRoute: typeof EntitiesEntityTypeIdRoute
-  EntitiesEntityTypeIndexRoute: typeof EntitiesEntityTypeIndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/entities/$entityType/': {
-      id: '/entities/$entityType/'
-      path: '/entities/$entityType'
-      fullPath: '/entities/$entityType'
-      preLoaderRoute: typeof EntitiesEntityTypeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/entities/$entityType/$id': {
-      id: '/entities/$entityType/$id'
-      path: '/entities/$entityType/$id'
-      fullPath: '/entities/$entityType/$id'
-      preLoaderRoute: typeof EntitiesEntityTypeIdRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_app/admin': {
+      id: '/_app/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/': {
+      id: '/_app/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AppAdminIndexRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/wishlists/$wishlistId': {
+      id: '/_app/wishlists/$wishlistId'
+      path: '/wishlists/$wishlistId'
+      fullPath: '/wishlists/$wishlistId'
+      preLoaderRoute: typeof AppWishlistsWishlistIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/usage': {
+      id: '/_app/admin/usage'
+      path: '/usage'
+      fullPath: '/admin/usage'
+      preLoaderRoute: typeof AppAdminUsageRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/tasks': {
+      id: '/_app/admin/tasks'
+      path: '/tasks'
+      fullPath: '/admin/tasks'
+      preLoaderRoute: typeof AppAdminTasksRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/stores': {
+      id: '/_app/admin/stores'
+      path: '/stores'
+      fullPath: '/admin/stores'
+      preLoaderRoute: typeof AppAdminStoresRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/settings': {
+      id: '/_app/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AppAdminSettingsRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/retailers': {
+      id: '/_app/admin/retailers'
+      path: '/retailers'
+      fullPath: '/admin/retailers'
+      preLoaderRoute: typeof AppAdminRetailersRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/models': {
+      id: '/_app/admin/models'
+      path: '/models'
+      fullPath: '/admin/models'
+      preLoaderRoute: typeof AppAdminModelsRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/jobs': {
+      id: '/_app/admin/jobs'
+      path: '/jobs'
+      fullPath: '/admin/jobs'
+      preLoaderRoute: typeof AppAdminJobsRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/_app/admin/audit': {
+      id: '/_app/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AppAdminAuditRouteImport
+      parentRoute: typeof AppAdminRoute
     }
   }
 }
 
+interface AppAdminRouteChildren {
+  AppAdminAuditRoute: typeof AppAdminAuditRoute
+  AppAdminJobsRoute: typeof AppAdminJobsRoute
+  AppAdminModelsRoute: typeof AppAdminModelsRoute
+  AppAdminRetailersRoute: typeof AppAdminRetailersRoute
+  AppAdminSettingsRoute: typeof AppAdminSettingsRoute
+  AppAdminStoresRoute: typeof AppAdminStoresRoute
+  AppAdminTasksRoute: typeof AppAdminTasksRoute
+  AppAdminUsageRoute: typeof AppAdminUsageRoute
+  AppAdminIndexRoute: typeof AppAdminIndexRoute
+}
+
+const AppAdminRouteChildren: AppAdminRouteChildren = {
+  AppAdminAuditRoute: AppAdminAuditRoute,
+  AppAdminJobsRoute: AppAdminJobsRoute,
+  AppAdminModelsRoute: AppAdminModelsRoute,
+  AppAdminRetailersRoute: AppAdminRetailersRoute,
+  AppAdminSettingsRoute: AppAdminSettingsRoute,
+  AppAdminStoresRoute: AppAdminStoresRoute,
+  AppAdminTasksRoute: AppAdminTasksRoute,
+  AppAdminUsageRoute: AppAdminUsageRoute,
+  AppAdminIndexRoute: AppAdminIndexRoute,
+}
+
+const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
+  AppAdminRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppAdminRoute: typeof AppAdminRouteWithChildren
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppWishlistsWishlistIdRoute: typeof AppWishlistsWishlistIdRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAdminRoute: AppAdminRouteWithChildren,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppWishlistsWishlistIdRoute: AppWishlistsWishlistIdRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  EntitiesEntityTypeIdRoute: EntitiesEntityTypeIdRoute,
-  EntitiesEntityTypeIndexRoute: EntitiesEntityTypeIndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

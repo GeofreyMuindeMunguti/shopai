@@ -1,0 +1,86 @@
+{
+  "id": "admin-audit",
+  "title": "Audit log",
+  "state": { "eventType": "" },
+  "dataSources": {
+    "events": {
+      "type": "supabase",
+      "table": "audit_events",
+      "select": "id, created_at, actor_id, subject_user_id, entity_type, entity_id, event_type, correlation_id",
+      "filters": [{ "field": "event_type", "op": "ilike", "value": "%{{state.eventType}}%" }],
+      "order": [{ "column": "created_at", "ascending": false }],
+      "limit": 200
+    }
+  },
+  "layout": {
+    "type": "Stack",
+    "props": { "spacing": 4 },
+    "children": [
+      {
+        "type": "Stack",
+        "props": { "spacing": 1 },
+        "children": [
+          { "type": "Heading", "props": { "level": 1, "children": "Audit log" } },
+          {
+            "type": "Text",
+            "props": {
+              "variant": "muted",
+              "size": "sm",
+              "children": "Admin changes, model tests, scout runs, match decisions and linked-account changes. Latest 200 events."
+            }
+          }
+        ]
+      },
+      {
+        "type": "Input",
+        "props": {
+          "label": "Filter by event type",
+          "name": "audit-filter",
+          "placeholder": "e.g. llm_models, match.approved, scout_run",
+          "value": "{{state.eventType}}",
+          "onChange": { "action": "setState", "key": "eventType", "value": "{{event.target.value}}" },
+          "className": "max-w-sm"
+        }
+      },
+      {
+        "type": "Text",
+        "if": "{{!data.events.length}}",
+        "props": { "variant": "muted", "children": "No events match." }
+      },
+      {
+        "type": "Stack",
+        "props": { "spacing": 2 },
+        "children": [
+          {
+            "type": "Stack",
+            "each": "{{data.events}}",
+            "as": "ev",
+            "key": "{{ev.id}}",
+            "props": { "direction": "horizontal", "justify": "between", "align": "center", "wrap": true, "className": "rounded-lg border p-3" },
+            "children": [
+              {
+                "type": "Stack",
+                "props": { "spacing": 1 },
+                "children": [
+                  {
+                    "type": "Stack",
+                    "props": { "direction": "horizontal", "spacing": 2, "align": "center" },
+                    "children": [
+                      { "type": "Badge", "props": { "variant": "secondary", "children": "{{ev.event_type}}" } },
+                      { "type": "Text", "props": { "size": "sm", "children": "{{ev.entity_type}} {{ev.entity_id}}" } }
+                    ]
+                  },
+                  {
+                    "type": "Text",
+                    "props": { "variant": "muted", "size": "xs", "children": "Actor: {{ev.actor_id || 'system'}} · Correlation: {{ev.correlation_id || '—'}}" }
+                  }
+                ]
+              },
+              { "type": "FormattedText", "props": { "value": "{{ev.created_at}}", "format": "datetime", "className": "text-sm text-muted-foreground" } }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

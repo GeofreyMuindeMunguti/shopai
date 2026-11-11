@@ -15,6 +15,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: true,
+    // PKCE: the OAuth redirect carries a one-time code, not tokens in the URL hash.
+    flowType: 'pkce',
   },
 });
 
