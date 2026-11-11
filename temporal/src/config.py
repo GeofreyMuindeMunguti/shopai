@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     bedrock_bootstrap_model_id: str | None = None
     bedrock_timeout_seconds: float = 120.0
 
+    # LiteLLM proxy (Anthropic Messages API). Used by llm_models rows with provider = 'litellm'.
+    litellm_messages_url: str | None = None
+    litellm_api_key: str | None = None
+    litellm_timeout_seconds: float = 120.0
+
     # Web search. Provider is selected by name; see src/search/registry.py for available providers.
     search_provider: str = "tavily"
     search_fallback_provider: str | None = None
@@ -67,11 +72,18 @@ class Settings(BaseSettings):
     enable_schedules: bool = True
 
 
-REQUIRED = ("bedrock_endpoint_url", "aws_region")
+# At least one model provider must be fully configured; a provider whose rows exist but whose
+# settings are missing fails per call with LLMConfigError.
+PROVIDER_REQUIRED = {
+    "bedrock": ("bedrock_endpoint_url", "aws_region"),
+    "litellm": ("litellm_messages_url", "litellm_api_key"),
+}
 
 
 def missing_required(s: Settings) -> list[str]:
-    return [name.upper() for name in REQUIRED if not getattr(s, name)]
+    if any(all(getattr(s, name) for name in names) for names in PROVIDER_REQUIRED.values()):
+        return []
+    return [name.upper() for name in PROVIDER_REQUIRED["bedrock"] if not getattr(s, name)]
 
 
 settings = Settings()

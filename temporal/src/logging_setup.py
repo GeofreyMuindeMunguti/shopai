@@ -52,7 +52,7 @@ def configure_logging(s: Settings, level: int = logging.INFO) -> None:
     handler.setFormatter(OneLineFormatter())
     handler.addFilter(RedactFilter([
         s.supabase_service_role_key, s.tavily_api_key or "", s.aws_secret_access_key or "",
-        s.aws_session_token or "", s.amazon_api_secret_key or "",
+        s.aws_session_token or "", s.amazon_api_secret_key or "", s.litellm_api_key or "",
     ]))
     root = logging.getLogger()
     root.handlers[:] = [handler]

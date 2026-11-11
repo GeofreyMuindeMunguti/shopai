@@ -6,15 +6,21 @@ from typing import Callable
 from ..config import Settings
 from .base import LLMConfigError, ModelProvider
 from .bedrock import BedrockProvider
+from .litellm import LiteLLMProvider
 
 _BUILDERS: dict[str, Callable[[Settings], ModelProvider]] = {
     "bedrock": lambda s: BedrockProvider(
-        endpoint_url=_require(s.bedrock_endpoint_url, "BEDROCK_ENDPOINT_URL"),
-        region=_require(s.aws_region, "AWS_REGION"),
+        endpoint_url=_require(s.bedrock_endpoint_url, "BEDROCK_ENDPOINT_URL", "bedrock"),
+        region=_require(s.aws_region, "AWS_REGION", "bedrock"),
         timeout_seconds=s.bedrock_timeout_seconds,
         access_key_id=s.aws_access_key_id,
         secret_access_key=s.aws_secret_access_key,
         session_token=s.aws_session_token,
+    ),
+    "litellm": lambda s: LiteLLMProvider(
+        messages_url=_require(s.litellm_messages_url, "LITELLM_MESSAGES_URL", "litellm"),
+        api_key=_require(s.litellm_api_key, "LITELLM_API_KEY", "litellm"),
+        timeout_seconds=s.litellm_timeout_seconds,
     ),
 }
 
@@ -22,9 +28,9 @@ _cache: dict[str, ModelProvider] = {}
 _lock = threading.Lock()
 
 
-def _require(value: str | None, name: str) -> str:
+def _require(value: str | None, name: str, provider: str) -> str:
     if not value:
-        raise LLMConfigError(f"{name} is required for the bedrock provider")
+        raise LLMConfigError(f"{name} is required for the {provider} provider")
     return value
 
 

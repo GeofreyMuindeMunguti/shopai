@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import json
+
 import boto3
+import httpx
 import pytest
 from botocore.stub import Stubber
 from temporalio.exceptions import WorkflowAlreadyStartedError
@@ -9,6 +12,7 @@ from src.config import Settings, missing_required
 from src.dispatcher import JobDispatcher, UnknownJobError, workflow_for_job
 from src.llm import LLMError, ModelRef
 from src.llm.bedrock import BedrockProvider
+from src.llm.litellm import LiteLLMProvider
 from src.logging_setup import RedactFilter
 from src.scout.tools import tool_specs, validate_submit
 from src.workflows.model_test import check_tool_call
@@ -68,9 +72,65 @@ def test_bedrock_error_mapping(code, status, kind, retryable):
     assert info.value.kind == kind and info.value.retryable is retryable
 
 
+def _litellm(handler):
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    return LiteLLMProvider(messages_url="https://proxy.example/v1/messages", api_key="sk-test", client=client)
+
+
+def test_litellm_request_and_tool_call_mapping():
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["url"], seen["key"], seen["body"] = str(request.url), request.headers["x-api-key"], json.loads(request.content)
+        return httpx.Response(200, json={
+            "content": [{"type": "text", "text": "Searching."},
+                        {"type": "tool_use", "id": "t2", "name": "retailer_search", "input": {"query": "boots"}}],
+            "stop_reason": "tool_use", "usage": {"input_tokens": 120, "output_tokens": 30},
+        })
+
+    res = _litellm(handler).converse(
+        [{"role": "user", "content": [{"type": "text", "text": "find boots"}, {"type": "text", "text": ""}]},
+         {"role": "assistant", "content": [{"type": "tool_use", "id": "t1", "name": "finish", "input": {"reason": "x"}}]},
+         {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "t1", "content": "ok", "is_error": True}]}],
+        [{"name": "finish", "description": "End", "input_schema": {"type": "object"}}],
+        ModelRef(provider="litellm", ref="claude-sonnet-5-5", max_output_tokens=1000), system="sys", max_tokens=500)
+    assert seen["url"] == "https://proxy.example/v1/messages" and seen["key"] == "sk-test"
+    assert seen["body"] == {
+        "model": "claude-sonnet-5-5",
+        "max_tokens": 500,
+        "system": "sys",
+        "messages": [
+            {"role": "user", "content": [{"type": "text", "text": "find boots"}]},
+            {"role": "assistant", "content": [{"type": "tool_use", "id": "t1", "name": "finish", "input": {"reason": "x"}}]},
+            {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "t1", "content": "ok", "is_error": True}]},
+        ],
+        "tools": [{"name": "finish", "description": "End", "input_schema": {"type": "object"}}],
+    }
+    assert res.text == "Searching." and res.stop_reason == "tool_use"
+    assert (res.input_tokens, res.output_tokens) == (120, 30)
+    assert res.tool_calls[0].name == "retailer_search" and res.tool_calls[0].input == {"query": "boots"}
+    assert res.message["content"][1] == {"type": "tool_use", "id": "t2", "name": "retailer_search", "input": {"query": "boots"}}
+
+
+@pytest.mark.parametrize("status,kind,retryable", [
+    (429, "throttled", True),
+    (503, "unavailable", True),
+    (400, "invalid", False),
+    (401, "access", False),
+])
+def test_litellm_error_mapping(status, kind, retryable):
+    provider = _litellm(lambda request: httpx.Response(status, json={"error": {"message": "nope"}}))
+    with pytest.raises(LLMError) as info:
+        provider.converse([{"role": "user", "content": [{"type": "text", "text": "hi"}]}], None,
+                          ModelRef(provider="litellm", ref="m"))
+    assert info.value.kind == kind and info.value.retryable is retryable and "nope" in str(info.value)
+
+
 def test_required_config():
     assert missing_required(Settings(bedrock_endpoint_url=None, aws_region=None)) == ["BEDROCK_ENDPOINT_URL", "AWS_REGION"]
     assert missing_required(Settings(bedrock_endpoint_url="https://x", aws_region="us-east-1")) == []
+    assert missing_required(Settings(bedrock_endpoint_url=None, aws_region=None,
+                                     litellm_messages_url="https://proxy/v1/messages", litellm_api_key="sk-x")) == []
 
 
 def test_settings_read_env(monkeypatch):
