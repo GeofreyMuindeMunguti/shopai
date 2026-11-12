@@ -4,7 +4,7 @@
 > run regenerates this branch. The machine-readable source of truth is [`runs.jsonl`](./runs.jsonl).
 > Deployed-environment E2E trends live separately on the [`e2e-history`](../../tree/e2e-history) branch.
 
-**Last updated:** 2026-11-11 14:58Z · 12 records · suites: `helm`, `seed`, `temporal`
+**Last updated:** 2026-11-12 06:12Z · 15 records · suites: `helm`, `seed`, `temporal`
 
 ![trend](./trend.svg)
 
@@ -12,19 +12,22 @@
 
 | Suite | Latest | When (UTC) | Pass 24h | Pass 7d | Green streak | Runs |
 |---|---|---|--:|--:|--:|--:|
-| `helm` | ❌ `failed` [↗](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43043642641) | — | — | — | 0 | 4 |
-| `seed` | ❌ `failed` [↗](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43043642641) | — | — | — | 0 | 4 |
-| `temporal` | ✅ `passed` [↗](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43043642641) | 2026-11-11 14:58Z | 100% (4) | 100% (4) | 4 | 4 |
+| `helm` | ❌ `failed` [↗](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43166498100) | — | — | — | 0 | 5 |
+| `seed` | ❌ `failed` [↗](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43166498100) | — | — | — | 0 | 5 |
+| `temporal` | ✅ `passed` [↗](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43166498100) | 2026-11-12 06:12Z | 100% (5) | 100% (5) | 5 | 5 |
 
 
 ## Recent runs
 
 | When (UTC) | Suite | Result | Pass | Fail | Skip | Duration | Commit | Run |
 |---|---|---|--:|--:|--:|--:|---|---|
+| 2026-11-12 06:12Z | `temporal` | ✅ passed | 90 | 0 | 0 | 2.6s | `0d600c7` | [#9](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43166498100) |
 | 2026-11-11 14:58Z | `temporal` | ✅ passed | 84 | 0 | 0 | 2.5s | `6a07794` | [#6](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43043642641) |
 | 2026-11-11 14:06Z | `temporal` | ✅ passed | 84 | 0 | 0 | 1.9s | `eaa8256` | [#4](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43035247634) |
 | 2026-11-11 13:43Z | `temporal` | ✅ passed | 84 | 0 | 0 | 2.7s | `61e2d1a` | [#2](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43031727100) |
 | 2026-11-11 13:17Z | `temporal` | ✅ passed | 84 | 0 | 0 | 1.9s | `4c31cc6` | [#1](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43027798749) |
+| — | `seed` | ❌ failed | 0 | 1 | 0 | — | `0d600c7` | [#9](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43166498100) |
+| — | `helm` | ❌ failed | 151 | 2 | 0 | — | `0d600c7` | [#9](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43166498100) |
 | — | `seed` | ❌ failed | 0 | 1 | 0 | — | `6a07794` | [#6](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43043642641) |
 | — | `helm` | ❌ failed | 151 | 2 | 0 | — | `6a07794` | [#6](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43043642641) |
 | — | `seed` | ❌ failed | 0 | 1 | 0 | — | `eaa8256` | [#4](https://github.com/GeofreyMuindeMunguti/shopai/actions/runs/43035247634) |
