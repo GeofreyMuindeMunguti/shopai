@@ -5,6 +5,7 @@ from typing import Any
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
 MAX_CANDIDATES_PER_RETAILER = 3
+MAX_SEARCH_RESULTS = 30  # per retailer_search call
 
 
 class SubmitCandidate(BaseModel):
@@ -42,7 +43,7 @@ def validate_submit(args: dict[str, Any]) -> tuple[SubmitCandidate | None, str |
 def tool_specs(is_shopify: bool) -> list[dict[str, Any]]:
     search_props: dict[str, Any] = {
         "query": {"type": "string", "description": "Product search terms, e.g. 'sony wh-1000xm5 black'"},
-        "max_results": {"type": "integer", "minimum": 1, "maximum": 10},
+        "max_results": {"type": "integer", "minimum": 1, "maximum": MAX_SEARCH_RESULTS},
     }
     search_required = ["query"]
     if is_shopify:

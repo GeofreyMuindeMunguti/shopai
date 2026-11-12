@@ -30,5 +30,5 @@ values
   ('wishlist_scout_enabled', 'true', 'Feature flag: allow new scout runs'),
   ('scout_beta_allowlist_enabled', 'false', 'Only allow emails in scout_beta_allowlist to run scouts'),
   ('scout_beta_allowlist', '[]', 'Lower-case emails allowed during beta'),
-  ('scout_daily_cap', '20', 'Max user-initiated scout runs per user per day')
+  ('scout_daily_cap', '30', 'Max user-initiated scout runs per user per day')
 on conflict (key) do nothing;
