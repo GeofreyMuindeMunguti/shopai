@@ -1,6 +1,9 @@
 # App running locally
 
-<img width="1288" height="814" alt="image" src="https://github.com/user-attachments/assets/59a9a499-d22b-44fb-86c2-4842cc283103" />
+
+
+
+
 
 
 # Scout: AI shopping wishlist
